@@ -1,4 +1,4 @@
-// Define the number of student cards per page
+// Number of student cards per page
 const cardsPerPage = 9;
 
 /*
@@ -80,6 +80,38 @@ function addPagination(list) {
     });
 }
 
+// Chek for search matches
+function checkForMatches(userInput) {
+    const studentMatches = []; // students matching the search input
+
+    // Loop through the data and check each name
+    for (let i = 0; i < data.length; i++) {
+        // Create a variable for current studentName
+        const studentName = data[i].name.first + " " + data[i].name.last;
+        // Check if studenName contains the search input
+        if (studentName.toLowerCase().includes(userInput)) {
+            // -> Add it to the studentMatches array
+            studentMatches.push(data[i]);
+        }
+    }
+
+    // Check if there are any matches to display
+    if (studentMatches.length > 0) {
+        showPage(studentMatches, 1);
+        addPagination(studentMatches);
+    } else {
+        // Select and empty student and link lists
+        const studentList = document.querySelector(".student-list");
+        const linkList = document.querySelector(".link-list");
+        studentList.innerHTML = "";
+        linkList.innerHTML = "";
+
+        // Add no results message:
+        studentList.innerHTML =
+            "<h3 style='color: grey; font-size: 2rem; font-style: italic; margin-top: 1.5rem'>No results found</h3>";
+    }
+}
+
 // Add a search component
 function addSearchComponent() {
     // Create search component
@@ -92,45 +124,18 @@ function addSearchComponent() {
    `;
     document.querySelector(".header").insertAdjacentHTML("beforeend", searchComponentHtml);
 
+    const searchInput = document.querySelector("#search");
+
     // Keyup Event listener for search component
-    document.querySelector("#search").addEventListener("keyup", (e) => {
-        const userInput = e.target.value.toLowerCase();
-        const studentMatches = []; // students matching the search input
-
-        // Loop through the data and check each name
-        for (let i = 0; i < data.length; i++) {
-            // Create a variable for current studentName
-            const studentName = data[i].name.first + " " + data[i].name.last;
-            // Check if studenName contains the search input
-            if (studentName.toLowerCase().includes(userInput)) {
-                // -> Add it to the studentMatches array
-                studentMatches.push(data[i]);
-            }
-        }
-
-        // Check if there are any matches to display
-        if (studentMatches.length > 0) {
-            showPage(studentMatches, 1);
-            addPagination(studentMatches);
-        } else {
-            // Select the student-list and empty it
-            const studentList = document.querySelector(".student-list");
-            studentList.innerHTML = "";
-
-            // Select the student-list and empty it
-            const linkList = document.querySelector(".link-list");
-            linkList.innerHTML = "";
-
-            // Add no results message:
-            studentList.innerHTML =
-                "<h3 style='color: grey; font-size: 2rem; font-style: italic; margin-top: 1.5rem'>No results found</h3>";
-        }
+    searchInput.addEventListener("keyup", (e) => {
+        const userInput = searchInput.value.toLowerCase();
+        checkForMatches(userInput);
     });
 
     // Click Event Listener for search button
     document.querySelector("header button").addEventListener("click", () => {
-        console.log("click");
-        // Call the check
+        const userInput = searchInput.value.toLowerCase();
+        checkForMatches(userInput);
     });
 }
 
