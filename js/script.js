@@ -79,6 +79,20 @@ function addPagination(list) {
     });
 }
 
+// Add a search component
+function addSearchComponent() {
+    // Create search component
+    const searchComponentHtml = `
+      <label for="search" class="student-search">
+         <span>Search by name</span>
+         <input id="search" placeholder="Search by name...">
+         <button type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
+      </label>
+   `;
+    document.querySelector(".header").insertAdjacentHTML("beforeend", searchComponentHtml);
+}
+
 // Call functions
 showPage(data, 1);
 addPagination(data);
+addSearchComponent();
